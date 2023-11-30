@@ -1,32 +1,12 @@
 #include "binary_trees.h"
 
 /**
- * tree_level - Thins function put one level at a time
+ * tree_hight_b - This function get hight
  * @tree: tree
- * @func: function to put tree lvl
- * @level: level
+ * Return: height of tree
  */
 
-void tree_level(const b_t_t *tree, void (*func)(int), int level)
-{
-	if (!tree)
-		return;
-	if (level == 1)
-		func(tree->n);
-	else
-	{
-		tree_level(tree->left, func, level - 1);
-		tree_level(tree->right, func, level - 1);
-	}
-}
-
-/**
- * binary_tree_height - Function to get height from binary tree
- * @tree: tree
- * Return: height
- */
-
-int binary_tree_height(const b_t_t *tree)
+int tree_hight_b(const b_t_t *tree)
 {
 	int left_Size = 0, right_Size = 0;
 
@@ -34,8 +14,8 @@ int binary_tree_height(const b_t_t *tree)
 		return (0);
 	else if (tree->left || tree->right)
 	{
-		left_Size = binary_tree_height(tree->left);
-		right_Size = binary_tree_height(tree->right);
+		left_Size = tree_hight_b(tree->left);
+		right_Size = tree_hight_b(tree->right);
 		if (left_Size > right_Size)
 			return (left_Size + 1);
 		return (right_Size + 1);
@@ -43,20 +23,38 @@ int binary_tree_height(const b_t_t *tree)
 	else
 		return (0);
 }
-
 /**
- * binary_tree_levelorder - Function of levelorder traversal
- * @tree: binary tree
+ * put_lvl - put lvl
+ * @tree: tree
  * @func: function
+ * @level: level
  */
 
+void put_lvl(const b_t_t *tree, void (*func)(int), int level)
+{
+	if (!tree)
+		return;
+	if (level == 1)
+		func(tree->n);
+	else
+	{
+		put_lvl(tree->left, func, level - 1);
+		put_lvl(tree->right, func, level - 1);
+	}
+}
+
+/**
+ * binary_tree_levelorder - lvl lorder function
+ * @tree: binary tree
+ * @func: fct
+ */
 void binary_tree_levelorder(const b_t_t *tree, void (*func)(int))
 {
 	int lvl = 0, height;
 
 	if (!tree || !func)
 		return;
-	height = binary_tree_height(tree);
+	height = tree_hight_b(tree);
 	while (lvl <= height)
-		tree_level(tree, func, ++lvl);
+		put_lvl(tree, func, ++lvl);
 }
